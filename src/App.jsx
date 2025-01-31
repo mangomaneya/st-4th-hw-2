@@ -1,35 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todo, setTodo] = useState({
+    title: "",
+    content: "",
+  });
+  const inputTodoHandler = (e) => {
+    console.log("e", e.target);
+    const { id, value } = e.target;
+    setTodo({
+      ...todo,
+      [id]: value,
+    });
+  };
+
+  const [todoList, setTodoList] = useState([]);
+  const resetInput = () => {
+    setTodo({ title: "", content: "" });
+  };
+
+  const submitTodoList = (e) => {
+    e.preventDefault();
+
+    if (!todo.title.trim() || !todo.content.trim()) {
+      alert(`빈칸을 모두 입력해주세요`);
+      return;
+    }
+
+    const {title, content} = todo;
+
+    setTodoList((prev) => {
+      return [...prev, { title: title.trim(), content: content.trim() }];
+    });
+    console.log(todoList);
+
+    resetInput();
+  };
 
   return (
     <>
+      <form onSubmit={submitTodoList}>
+        <label htmlFor="title">제목</label>
+        <input
+          type="text"
+          id="title"
+          value={todo.title}
+          onChange={inputTodoHandler}
+        />
+        <label htmlFor="content">내용</label>
+        <input
+          type="text"
+          id="content"
+          value={todo.content}
+          onChange={inputTodoHandler}
+        />
+        <button>투두리스트 추가</button>
+      </form>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <h3>Working</h3>
+        <h3>Done</h3>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
