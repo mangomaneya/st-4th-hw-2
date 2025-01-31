@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 
 function App() {
@@ -6,7 +8,7 @@ function App() {
     content: "",
   });
   const inputTodoHandler = (e) => {
-    console.log("e", e.target);
+    // console.log("e", e.target);
     const { id, value } = e.target;
     setTodo({
       ...todo,
@@ -27,8 +29,7 @@ function App() {
       return;
     }
 
-    const {title, content} = todo;
-
+    const { title, content } = todo;
     setTodoList((prev) => {
       return [...prev, { title: title.trim(), content: content.trim() }];
     });
@@ -36,6 +37,11 @@ function App() {
 
     resetInput();
   };
+
+  const titleRef = useRef("");
+  useEffect(() => {
+    titleRef.current.focus();
+  }, [todoList]);
 
   return (
     <>
@@ -46,6 +52,7 @@ function App() {
           id="title"
           value={todo.title}
           onChange={inputTodoHandler}
+          ref={titleRef}
         />
         <label htmlFor="content">내용</label>
         <input
@@ -58,6 +65,18 @@ function App() {
       </form>
       <div>
         <h3>Working</h3>
+        <ul>
+          {todoList.map((todo) => {
+            return (
+              <li key={todo.title}>
+                <p>{todo.title}</p>
+                <p>{todo.content}</p>
+                <button>삭제</button>
+                <button>완료</button>
+              </li>
+            );
+          })}
+        </ul>
         <h3>Done</h3>
       </div>
     </>
