@@ -1,10 +1,12 @@
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   // 인풋값 관리
   const [todo, setTodo] = useState({
+    id: 0,
     title: "",
     content: "",
   });
@@ -13,6 +15,7 @@ function App() {
     const { id, value } = e.target;
     setTodo({
       ...todo,
+      id: uuidv4(),
       [id]: value,
     });
   };
@@ -20,7 +23,7 @@ function App() {
   // 투두리스트 생성 및 동작
   const [todoList, setTodoList] = useState([]);
   const resetInput = () => {
-    setTodo({ title: "", content: "" });
+    setTodo({ id: 0, title: "", content: "" });
   };
 
   const submitTodoList = (e) => {
@@ -31,9 +34,12 @@ function App() {
       return;
     }
 
-    const { title, content } = todo;
+    const { id, title, content } = todo;
     setTodoList((prev) => {
-      return [...prev, { title: title.trim(), content: content.trim() }];
+      return [
+        ...prev,
+        { id: id, title: title.trim(), content: content.trim() },
+      ];
     });
     console.log(todoList);
 
@@ -47,13 +53,35 @@ function App() {
   }, [todoList]);
 
   // 투두리스트 삭제
-  const deleteHandler = (title) => {
-    console.log(`삭제될 투두`, title);
+  const deleteHandler = (id) => {
+    console.log(`삭제될 투두 id =>`, id);
     const newTodoList = todoList.filter((todo) => {
-      return todo.title !== title;
+      return todo.id !== id;
     });
     setTodoList(newTodoList);
   };
+
+  // 완료 투두리스트 생성 - doneTodoList 스테이트 생성 / onclick이벤트
+  const [doneTodoList, setDoneTodoList] = useState([]);
+  const doneTodoListHandler = (title) => {
+    console.log("title>", title);
+    const newTodoList = todoList.filter((todo) => {
+      return todo.title === title;
+    });
+    console.log("newTodoList", newTodoList);
+    setDoneTodoList((prev) => {
+      return [
+        ...prev,
+        { title: newTodoList.title, content: newTodoList.content },
+      ];
+    });
+  };
+
+  // 완료 취소 동작 - 취소된 완료 투두리스트를, 기본 투두리스트에 추가
+  const workingTodoList = (todo) => {
+    console.log("todo", todo);
+  };
+
   return (
     <>
       <form onSubmit={submitTodoList}>
@@ -79,16 +107,30 @@ function App() {
         <ul>
           {todoList.map((todo) => {
             return (
-              <li key={todo.title}>
+              <li key={todo.id}>
                 <p>{todo.title}</p>
                 <p>{todo.content}</p>
-                <button onClick={() => deleteHandler(todo.title)}>삭제</button>
-                <button>완료</button>
+                <button onClick={() => deleteHandler(todo.id)}>삭제</button>
+                <button onClick={() => doneTodoListHandler(todo.id)}>
+                  완료
+                </button>
               </li>
             );
           })}
         </ul>
         <h3>Done</h3>
+        <ul>
+          {doneTodoList.map((todo) => {
+            return (
+              <li key={todo.id}>
+                <p>{todo.title}</p>
+                <p>{todo.content}</p>
+                <button onClick={() => deleteHandler(todo.id)}>삭제</button>
+                <button onClick={() => workingTodoList(todo)}>취소</button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </>
   );
