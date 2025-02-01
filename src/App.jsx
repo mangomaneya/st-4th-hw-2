@@ -4,6 +4,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
+import TodoListContext from "./context/todoListContext";
 
 function App() {
   // 인풋값 관리
@@ -97,7 +98,9 @@ function App() {
   };
 
   return (
-    <>
+    <TodoListContext.Provider
+      value={{ todo, deleteHandler, doneTodoListHandler }}
+    >
       <TodoForm
         todo={todo}
         titleRef={titleRef}
@@ -107,21 +110,22 @@ function App() {
 
       <div>
         <h3>Working</h3>
-
         <TodoList
           todoList={todoList}
           deleteHandler={deleteHandler}
-          doneTodoListHandler={doneTodoListHandler}
+          stateTodoListHandler={doneTodoListHandler}
+          버튼이름="완료"
         />
 
         <h3>Done</h3>
         <TodoList
           todoList={doneTodoList}
           deleteHandler={deleteHandler}
-          doneTodoListHandler={workingTodoList}
+          stateTodoListHandler={workingTodoList}
+          버튼이름="취소"
         />
       </div>
-    </>
+    </TodoListContext.Provider>
   );
 }
 

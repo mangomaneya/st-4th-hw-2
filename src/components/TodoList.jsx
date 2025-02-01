@@ -1,6 +1,11 @@
 import TodoItem from "./TodoItem";
 
-const TodoList = ({ todoList, deleteHandler, doneTodoListHandler }) => {
+const TodoList = ({
+  todoList,
+  deleteHandler,
+  stateTodoListHandler,
+  버튼이름,
+}) => {
   return (
     <ul>
       {todoList.map((todo) => {
@@ -9,7 +14,8 @@ const TodoList = ({ todoList, deleteHandler, doneTodoListHandler }) => {
             key={todo.id}
             todo={todo}
             deleteHandler={deleteHandler}
-            doneTodoListHandler={doneTodoListHandler}
+            stateTodoListHandler={stateTodoListHandler}
+            버튼이름={버튼이름}
           />
         );
       })}
