@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import TodoForm from "./components/TodoForm";
 
 function App() {
   // 인풋값 관리
@@ -88,32 +89,21 @@ function App() {
     setTodoList((prev) => {
       return [...prev, newWorkingTodoList];
     });
-    const newDoneTodoList = doneTodoList.filter((todo)=>{
+    const newDoneTodoList = doneTodoList.filter((todo) => {
       return todo.id !== id;
-    })
+    });
     setDoneTodoList(newDoneTodoList);
   };
 
   return (
     <>
-      <form onSubmit={submitTodoList}>
-        <label htmlFor="title">제목</label>
-        <input
-          type="text"
-          id="title"
-          value={todo.title}
-          onChange={inputTodoHandler}
-          ref={titleRef}
-        />
-        <label htmlFor="content">내용</label>
-        <input
-          type="text"
-          id="content"
-          value={todo.content}
-          onChange={inputTodoHandler}
-        />
-        <button>투두리스트 추가</button>
-      </form>
+      <TodoForm
+        todo={todo}
+        titleRef={titleRef}
+        submitTodoList={submitTodoList}
+        inputTodoHandler={inputTodoHandler}
+      />
+
       <div>
         <h3>Working</h3>
         <ul>
