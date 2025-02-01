@@ -1,5 +1,6 @@
 const TodoForm = ({ submitTodoList, todo, inputTodoHandler, titleRef }) => {
   const { title, content } = todo;
+
   return (
     <form onSubmit={submitTodoList}>
       <label htmlFor="title">제목</label>

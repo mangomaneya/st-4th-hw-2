@@ -96,11 +96,16 @@ function App() {
     });
     setDoneTodoList(newDoneTodoList);
   };
+  //완료 투두리스트 삭제
+  const doneDeleteHandler = (id) => {
+    const newDeletedDoneTodoList = doneTodoList.filter((todo) => {
+      return todo.id !== id;
+    });
+    setDoneTodoList(newDeletedDoneTodoList);
+  };
 
   return (
-    <TodoListContext.Provider
-      value={{ todo, deleteHandler, doneTodoListHandler }}
-    >
+    <TodoListContext.Provider value={{}}>
       <TodoForm
         todo={todo}
         titleRef={titleRef}
@@ -120,7 +125,7 @@ function App() {
         <h3>Done</h3>
         <TodoList
           todoList={doneTodoList}
-          deleteHandler={deleteHandler}
+          deleteHandler={doneDeleteHandler}
           stateTodoListHandler={workingTodoList}
           버튼이름="취소"
         />
