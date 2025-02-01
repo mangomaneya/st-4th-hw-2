@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import TodoForm from "./components/TodoForm";
+import TodoList from "./components/TodoList";
 
 function App() {
   // 인풋값 관리
@@ -106,33 +107,19 @@ function App() {
 
       <div>
         <h3>Working</h3>
-        <ul>
-          {todoList.map((todo) => {
-            return (
-              <li key={todo.id}>
-                <p>{todo.title}</p>
-                <p>{todo.content}</p>
-                <button onClick={() => deleteHandler(todo.id)}>삭제</button>
-                <button onClick={() => doneTodoListHandler(todo.id)}>
-                  완료
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+
+        <TodoList
+          todoList={todoList}
+          deleteHandler={deleteHandler}
+          doneTodoListHandler={doneTodoListHandler}
+        />
+
         <h3>Done</h3>
-        <ul>
-          {doneTodoList.map((todo) => {
-            return (
-              <li key={todo.id}>
-                <p>{todo.title}</p>
-                <p>{todo.content}</p>
-                <button onClick={() => deleteHandler(todo.id)}>삭제</button>
-                <button onClick={() => workingTodoList(todo.id)}>취소</button>
-              </li>
-            );
-          })}
-        </ul>
+        <TodoList
+          todoList={doneTodoList}
+          deleteHandler={deleteHandler}
+          doneTodoListHandler={workingTodoList}
+        />
       </div>
     </>
   );
