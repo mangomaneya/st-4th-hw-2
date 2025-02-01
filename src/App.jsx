@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 function App() {
+  // 인풋값 관리
   const [todo, setTodo] = useState({
     title: "",
     content: "",
@@ -16,6 +17,7 @@ function App() {
     });
   };
 
+  // 투두리스트 생성 및 동작
   const [todoList, setTodoList] = useState([]);
   const resetInput = () => {
     setTodo({ title: "", content: "" });
@@ -38,11 +40,20 @@ function App() {
     resetInput();
   };
 
+  // 자동 포커스
   const titleRef = useRef("");
   useEffect(() => {
     titleRef.current.focus();
   }, [todoList]);
 
+  // 투두리스트 삭제
+  const deleteHandler = (title) => {
+    console.log(`삭제될 투두`, title);
+    const newTodoList = todoList.filter((todo) => {
+      return todo.title !== title;
+    });
+    setTodoList(newTodoList);
+  };
   return (
     <>
       <form onSubmit={submitTodoList}>
@@ -71,7 +82,7 @@ function App() {
               <li key={todo.title}>
                 <p>{todo.title}</p>
                 <p>{todo.content}</p>
-                <button>삭제</button>
+                <button onClick={() => deleteHandler(todo.title)}>삭제</button>
                 <button>완료</button>
               </li>
             );
